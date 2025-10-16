@@ -17,7 +17,7 @@ resource "aws_subnet" "sub-pub1" {
 resource "aws_subnet" "sub-priv1" {
   vpc_id = aws_vpc.main.id
 //cidr_block = 
-  cidr_block = "10.0.1.0/24"
+  cidr_block = "10.0.2.0/24"
   map_public_ip_on_launch = false
   availability_zone = "us-east-1a"
 }
@@ -39,14 +39,23 @@ resource "aws_subnet" "sub-priv2" {
 }
 */
 
-resource "aws_internet_gateway" "igw" {
+resource "aws_internet_gateway" "igw" {  //decalra;'ao do igw
   vpc_id = aws_vpc.main.id
   tags = {
     Name = "internet_gateway"
   }
 }
 
-resource "aws_route_table" "route-table" {
+resource "aws_eip" "nat_eip" { //elastic ip para o nat
+//  vpc = true
+}
+
+resource "aws_nat_gateway" "nat" { //declara;'ao do nat
+  allocation_id = aws_eip.nat_eip.id
+  subnet_id     = aws_subnet.sub-pub1.id
+}
+
+resource "aws_route_table" "public_rt" {
   vpc_id = aws_vpc.main.id
   route {
     cidr_block = "0.0.0.0/0"
@@ -54,16 +63,24 @@ resource "aws_route_table" "route-table" {
   }
 }
 
+resource "aws_route_table" "private_rt" {
+  vpc_id = aws_vpc.main.id
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.nat.id
+  }
+}
+
 //Nessa rota apontamos a sub_pub para o igw (e para mais algum lugar?)
-resource "aws_route_table_association" "subnetpub_route" { 
+resource "aws_route_table_association" "pub_association" { 
     subnet_id = aws_subnet.sub-pub1.id
-    route_table_id = aws_route_table.route_table.id
+    route_table_id = aws_route_table.public_rt.id
 }
 
 //NEssa rota temos que apontar a sub_priv para o NAT (e para mais algum lugar?)
-resource "aws_route_table_association" "subnetpriv_route" { 
-    subnet_id = aws_subnet.sub-priv1.id
-    route_table_id = aws_route_table.route_table.id
+resource "aws_route_table_association" "priv_association" {
+  subnet_id      = aws_subnet.sub-priv1.id
+  route_table_id = aws_route_table.private_rt.id
 }
 
 
