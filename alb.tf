@@ -1,5 +1,5 @@
 resource "aws_alb" "ecs_alb" {
-  name = "ecs_alb"
+  name = "ecs-alb"
   internal = false
   load_balancer_type = "application"
   security_groups = [aws_security_group.security_group.id]
@@ -24,7 +24,7 @@ resource "aws_lb_target_group" "ecs_tg" {
 }
 
 resource "aws_lb_listener" "ecs_alb_listener" {
-  load_balancer_arn = aws_lb.ecs_alb.arn
+  load_balancer_arn = aws_alb.ecs_alb.arn
   port              = 80
   protocol          = "HTTP"
   default_action {
