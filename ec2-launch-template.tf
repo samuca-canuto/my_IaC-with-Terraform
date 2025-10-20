@@ -10,10 +10,6 @@ resource "aws_launch_template" "ec2_lt" {
   vpc_security_group_ids = [aws_security_group.security_group.id]
   iam_instance_profile {
     name = "AWSServiceRoleForECS"
-
-//“ecsInstanceRole” é uma função predefinida disponível em 
-//todas as contas AWS. No entanto, se você quiser usar uma função 
-//personalizada, certifique-se de que ela possa acessar o serviço ECS.
   }
 
   tag_specifications {
