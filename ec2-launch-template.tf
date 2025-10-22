@@ -13,7 +13,7 @@ resource "aws_launch_template" "ec2_lt" {
   tag_specifications {
     resource_type = "instance"
     tags = {
-        Name = "esc_instance"
+        Name = "ec2_instance"
     }
   } 
   user_data = base64encode(<<EOF
