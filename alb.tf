@@ -13,7 +13,7 @@ aws_subnet.sub-pub2.id
   }
 }
 
-resource "aws_lb_target_group" "ecs_tg" {
+resource "aws_lb_target_group" "ec2_tg" {
   name        = "webapp-tg"
   port        = 80
   protocol    = "HTTP"
@@ -26,8 +26,8 @@ resource "aws_lb_target_group" "ecs_tg" {
   }
 }
 
-resource "aws_lb_listener" "ecs_alb_listener" {
-  load_balancer_arn = aws_alb.ecs_alb.arn
+resource "aws_lb_listener" "ec2_alb_listener" {
+  load_balancer_arn = aws_alb.ec2_alb.arn
   port              = 80
   protocol          = "HTTP"
   default_action {
