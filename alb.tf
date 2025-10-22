@@ -1,5 +1,5 @@
-resource "aws_alb" "ecs_alb" {
-  name = "ecs-alb"
+resource "aws_alb" "ec2_alb" {
+  name = "ec2-alb"
   internal = false
   load_balancer_type = "application"
   security_groups = [aws_security_group.security_group.id]
