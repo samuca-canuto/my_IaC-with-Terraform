@@ -1,6 +1,7 @@
 resource "aws_launch_template" "ec2_lt" {
   name_prefix = "ec2-template"
-  image_id = "ami-0c45946ade6066f3d"  # AMI otimizada para ECS
+  image_id = "ami-0c02fb55956c7d316"  # Amazon Linux 2 (us-east-1)
+
 
 
   instance_type = "t2.micro"
@@ -15,7 +16,15 @@ resource "aws_launch_template" "ec2_lt" {
         Name = "esc_instance"
     }
   } 
-  user_data = filebase64("${path.module}/install.sh")
+  user_data = base64encode(<<EOF
+#!/bin/bash
+sudo yum update -y
+sudo yum install -y httpd
+sudo systemctl enable httpd
+sudo systemctl start httpd
+echo "<h1>Infra funcionando direto na EC2!</h1>" > /var/www/html/index.html
+EOF
+)
 }
 
 
