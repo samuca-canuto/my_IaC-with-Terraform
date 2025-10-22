@@ -11,7 +11,9 @@ resource "aws_autoscaling_group" "ecs_asg" {
     id      = aws_launch_template.ec2_lt.id
     version = "$Latest"
   }
-  
+
+target_group_arns = [aws_lb_target_group.ec2_tg.arn]
+
   tag {
     key = "AmazonECSManaged"
     value = true
