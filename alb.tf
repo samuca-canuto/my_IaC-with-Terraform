@@ -32,6 +32,6 @@ resource "aws_lb_listener" "ec2_alb_listener" {
   protocol          = "HTTP"
   default_action {
     type             = "forward" # ecaminha tráfeto para o TARGET GROUP
-    target_group_arn = aws_lb_target_group.ecs_tg.arn
+    target_group_arn = aws_lb_target_group.ec2_tg.arn
   }
 }
