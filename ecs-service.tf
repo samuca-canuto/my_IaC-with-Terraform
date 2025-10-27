@@ -27,7 +27,7 @@ resource "aws_ecs_service" "ecs_service" {
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.ecs_tg.arn
+    target_group_arn = aws_lb_target_group.ec2_tg.arn
     container_name   = "webapp-ctr"
     container_port   = 80
   }
