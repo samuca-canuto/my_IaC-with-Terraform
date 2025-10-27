@@ -21,18 +21,11 @@ resource "aws_ecs_service" "ecs_service" {
   triggers = {
     redeployment = timestamp()
   }
-  capacity_provider_strategy {
-    capacity_provider = aws_ecs_capacity_provider.ecs_capacity_provider.name
-    weight            = 100
-  }
+
 
   load_balancer {
     target_group_arn = aws_lb_target_group.ec2_tg.arn
     container_name   = "webapp-ctr"
     container_port   = 80
   }
-
-  depends_on = [
-    aws_autoscaling_group.ecs_asg,
-  ]
 }
