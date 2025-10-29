@@ -9,7 +9,7 @@ resource "aws_ecs_task_definition" "otel_collector" {
   container_definitions = jsonencode([
     {
       name      = "otel-collector"
-      image     = "otel/opentelemetry-collector-contrib:latest"
+      image     = "787351301643.dkr.ecr.us-east-1.amazonaws.com/otel-tarde:latest"
       essential = true
 
       portMappings = [
