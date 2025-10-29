@@ -15,10 +15,12 @@ resource "aws_ecs_task_definition" "otel_collector" {
       portMappings = [
         {
           containerPort = 4317
+          hostPort      = 4317
           protocol      = "tcp"
         },
         {
           containerPort = 4318
+          hostPort      = 4318
           protocol      = "tcp"
         }
       ]
@@ -26,11 +28,11 @@ resource "aws_ecs_task_definition" "otel_collector" {
       environment = [
         {
           name  = "OTEL_EXPORTER_OTLP_ENDPOINT"
-          value = "https://ingest.us.signoz.cloud/" # substitua com sua URL do SigNoz Cloud ou IP on-prem
+          value = "https://ingest.us.signoz.cloud:443"
         },
         {
           name  = "OTEL_EXPORTER_OTLP_HEADERS"
-          value = "8I6KAHm4A-32OY9kN0tKU7dxtEz4vOTxAHzl" # substitua com seu token do SigNoz Cloud
+          value = "signoz-access-token=8I6KAHm4A-32OY9kN0tKU7dxtEz4vOTxAHzl"
         },
         {
           name  = "OTEL_RESOURCE_ATTRIBUTES"
@@ -41,6 +43,15 @@ resource "aws_ecs_task_definition" "otel_collector" {
           value = "info"
         }
       ]
+
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = "/ecs/otel-collector"
+          awslogs-region        = "us-east-1"
+          awslogs-stream-prefix = "ecs"
+        }
+      }
     }
   ])
 }
