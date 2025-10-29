@@ -26,7 +26,7 @@ resource "aws_ecs_task_definition" "otel_collector" {
       environment = [
         {
           name  = "OTEL_EXPORTER_OTLP_ENDPOINT"
-          value = "https://ingest.us.signoz.cloud" # substitua com sua URL do SigNoz Cloud ou IP on-prem
+          value = "https://ingest.us.signoz.cloud/" # substitua com sua URL do SigNoz Cloud ou IP on-prem
         },
         {
           name  = "OTEL_EXPORTER_OTLP_HEADERS"
