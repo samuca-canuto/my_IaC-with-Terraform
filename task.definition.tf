@@ -26,7 +26,7 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
       environment = [
         {
           name  = "OTEL_EXPORTER_OTLP_ENDPOINT"
-          value = "http://IP_DO_COLLECTOR:4318"
+          value = "http://172.16.58.87:4318"
         },
         {
           name  = "OTEL_SERVICE_NAME"
