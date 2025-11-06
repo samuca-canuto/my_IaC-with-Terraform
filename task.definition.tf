@@ -1,7 +1,7 @@
 resource "aws_ecs_task_definition" "ecs_task_definition" {
   family             = "webapp"
   network_mode       = "awsvpc"
-  execution_role_arn = "arn:aws:iam::787351301643:role/LabRole" # Verifique se essa role tem permissões ECS Task Execution
+  execution_role_arn = "arn:aws:iam::787351301643:role/LabRole"
   cpu                = 1024
 
   runtime_platform {
@@ -25,16 +25,24 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
       ]
       environment = [
         {
-          name  = "OTEL_EXPORTER_OTLP_ENDPOINT"
-          value = "http://10.0.1.110:4318"
-        },
-        {
           name  = "OTEL_SERVICE_NAME"
           value = "webapp-ecs"
         },
         {
           name  = "OTEL_EXPORTER_OTLP_PROTOCOL"
           value = "http/protobuf"
+        },
+        {
+          name  = "OTEL_EXPORTER_OTLP_ENDPOINT"
+          value = "https://ingest.us.signoz.cloud:443"
+        },
+        {
+          name  = "SIGNOZ_INGESTION_KEY"
+          value = "XWAETMw2LLGA7RV9MXndFZFQkdyFL8DDNO-u"
+        },
+        {
+          name  = "OTEL_EXPORTER_OTLP_HEADERS"
+          value = "signoz-access-token=XWAETMw2LLGA7RV9MXndFZFQkdyFL8DDNO-u"
         }
       ]
     }
