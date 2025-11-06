@@ -2,10 +2,10 @@ resource "aws_ecs_service" "ecs_service" {
   name            = "webapp-svc"
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.ecs_task_definition.arn
-  desired_count   = 2 # we want to run 2 instances of the container image on our ECS cluster
+  desired_count   = 2
 
   network_configuration {
-    security_groups    = [aws_security_group.security_group.id]
+    security_groups = [aws_security_group.security_group.id]
     subnets = [
       aws_subnet.sub-pub1.id,
       aws_subnet.sub-pub2.id
@@ -18,9 +18,16 @@ resource "aws_ecs_service" "ecs_service" {
     type = "distinctInstance"
   }
 
+  # 🔧 Mantém a chave 'triggers', mas evita bug do provider
   triggers = {
-    redeployment = timestamp()
+    redeployment = "manual-trigger"
   }
+
+  # ⚙️ Ignora mudanças automáticas de triggers durante apply
+  lifecycle {
+    ignore_changes = [triggers]
+  }
+
   capacity_provider_strategy {
     capacity_provider = aws_ecs_capacity_provider.ecs_capacity_provider.name
     weight            = 100
