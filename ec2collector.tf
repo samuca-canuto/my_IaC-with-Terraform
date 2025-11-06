@@ -41,6 +41,8 @@ processors:
 exporters:
   otlp:
     endpoint: "ingest.us.signoz.cloud:443"
+    headers:
+      signoz-access-token: "XWAETMw2LLGA7RV9MXndFZFQkdyFL8DDNO-u"
     tls:
       insecure: false
 
