@@ -42,15 +42,7 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
         },
         {
           name  = "OTEL_EXPORTER_OTLP_ENDPOINT"
-          value = "https://ingest.us.signoz.cloud:443"
-        },
-        {
-          name  = "SIGNOZ_INGESTION_KEY"
-          value = "b4e4cb2f-5337-4c86-a952-793acc1370a3"
-        },
-        {
-          name  = "OTEL_EXPORTER_OTLP_HEADERS"
-          value = "signoz-ingestion-key=b4e4cb2f-5337-4c86-a952-793acc1370a3"
+          value = "http://10.0.1.160:4318"
         }
       ]
     }
