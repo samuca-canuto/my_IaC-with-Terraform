@@ -34,6 +34,14 @@ receivers:
       http:
         endpoint: 0.0.0.0:4318
 
+  hostmetrics:
+    collection_interval: 30s
+    scrapers:
+      cpu:
+      memory:
+      disk:
+      network:
+
 processors:
   batch:
     timeout: 10s
@@ -54,7 +62,7 @@ service:
       processors: [batch]
       exporters: [otlp]
     metrics:
-      receivers: [otlp]
+      receivers: [otlp, hostmetrics]
       processors: [batch]
       exporters: [otlp]
 EOT
