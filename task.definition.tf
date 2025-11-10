@@ -42,7 +42,7 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
         },
         {
           name  = "OTEL_EXPORTER_OTLP_HEADERS"
-          value = "signoz-access-token=b4e4cb2f-5337-4c86-a952-793acc1370a3"
+          value = "signoz-ingestion-key=b4e4cb2f-5337-4c86-a952-793acc1370a3"
         }
       ]
     }
