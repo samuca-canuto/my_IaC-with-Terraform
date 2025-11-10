@@ -13,11 +13,18 @@ set -e
 apt update -y
 apt install -y wget unzip
 
-# Baixa e instala o OpenTelemetry Collector
+# Instala o OpenTelemetry Collector
 wget https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/v0.108.0/otelcol-contrib_0.108.0_linux_amd64.deb
-dpkg -i otelcol-contrib_0.108.0_linux_amd64.deb
+dpkg -i otelcol-contrib_0.108.0_linux_amd64.deb || true
 
-# Cria o arquivo de configuração
+# Garante que o binário existe
+if [ ! -f /usr/bin/otelcol-contrib ]; then
+  mv /usr/local/bin/otelcol-contrib /usr/bin/otelcol-contrib || true
+fi
+
+# Cria diretório e arquivo de configuração
+mkdir -p /etc/otelcol-contrib
+
 cat <<EOT > /etc/otelcol-contrib/config.yaml
 extensions:
   health_check:
@@ -64,7 +71,22 @@ service:
       exporters: [otlp]
 EOT
 
-# Recarrega daemons e inicia o serviço
+# Cria manualmente o serviço systemd
+cat <<EOT > /etc/systemd/system/otelcol-contrib.service
+[Unit]
+Description=OpenTelemetry Collector Contrib
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/otelcol-contrib --config /etc/otelcol-contrib/config.yaml
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
+EOT
+
+# Recarrega o systemd e inicia o serviço
 systemctl daemon-reload
 systemctl enable otelcol-contrib
 systemctl start otelcol-contrib
@@ -73,10 +95,6 @@ EOF
   tags = {
     Name = "otel-collector"
   }
-}
-
-output "otel_collector_private_ip" {
-  value = aws_instance.otel_collector.private_ip
 }
 
 output "otel_collector_public_ip" {
