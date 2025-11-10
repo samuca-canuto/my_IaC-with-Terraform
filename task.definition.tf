@@ -23,26 +23,39 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
           protocol      = "tcp"
         }
       ]
+
       environment = [
         {
           name  = "OTEL_SERVICE_NAME"
           value = "webapp-ecs"
         },
         {
-          name  = "OTEL_EXPORTER_OTLP_PROTOCOL"
-          value = "http/protobuf"
-        },
-        {
           name  = "OTEL_EXPORTER_OTLP_ENDPOINT"
           value = "https://ingest.us.signoz.cloud:443"
         },
         {
-          name  = "SIGNOZ_INGESTION_KEY"
-          value = "b4e4cb2f-5337-4c86-a952-793acc1370a3"
+          name  = "OTEL_EXPORTER_OTLP_PROTOCOL"
+          value = "http/protobuf"
         },
         {
           name  = "OTEL_EXPORTER_OTLP_HEADERS"
           value = "signoz-ingestion-key=b4e4cb2f-5337-4c86-a952-793acc1370a3"
+        },
+        {
+          name  = "OTEL_METRICS_EXPORTER"
+          value = "otlp"
+        },
+        {
+          name  = "OTEL_LOGS_EXPORTER"
+          value = "otlp"
+        },
+        {
+          name  = "OTEL_TRACES_EXPORTER"
+          value = "otlp"
+        },
+        {
+          name  = "OTEL_RESOURCE_ATTRIBUTES"
+          value = "service.name=webapp-ecs,deployment.environment=ecs,cloud.provider=aws"
         }
       ]
     }
