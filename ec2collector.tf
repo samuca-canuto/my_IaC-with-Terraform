@@ -1,27 +1,24 @@
-# ============================================================
-# Instância EC2 dedicada ao OpenTelemetry Collector
-# ============================================================
-
 resource "aws_instance" "otel_collector" {
-  ami                    = "ami-0c7217cdde317cfec" # Ubuntu 22.04 LTS (us-east-1)
+  ami                    = "ami-0c7217cdde317cfec" # Ubuntu 22.04 LTS
   instance_type          = "t3.micro"
   subnet_id              = aws_subnet.sub-pub1.id
   vpc_security_group_ids = [aws_security_group.security_group.id]
-  key_name               = "vockey" # substitua pela sua chave existente
-
+  key_name               = "vockey"
   associate_public_ip_address = true
 
-  user_data = <<-EOF
-    #!/bin/bash
-    apt update -y
-    apt install -y wget unzip
+  user_data = <<EOF
+#!/bin/bash
+set -e
 
-    # Baixa e instala o OpenTelemetry Collector
-    wget https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/v0.108.0/otelcol-contrib_0.108.0_linux_amd64.deb
-    dpkg -i otelcol-contrib_0.108.0_linux_amd64.deb
+apt update -y
+apt install -y wget unzip
 
-    # Cria o arquivo de configuração
-    cat <<EOT > /etc/otelcol-contrib/config.yaml
+# Baixa e instala o OpenTelemetry Collector
+wget https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/v0.108.0/otelcol-contrib_0.108.0_linux_amd64.deb
+dpkg -i otelcol-contrib_0.108.0_linux_amd64.deb
+
+# Cria o arquivo de configuração
+cat <<EOT > /etc/otelcol-contrib/config.yaml
 extensions:
   health_check:
     endpoint: 0.0.0.0:13133
@@ -67,19 +64,16 @@ service:
       exporters: [otlp]
 EOT
 
-    # Habilita e inicia o serviço
-    systemctl enable otelcol-contrib
-    systemctl restart otelcol-contrib
-  EOF
+# Recarrega daemons e inicia o serviço
+systemctl daemon-reload
+systemctl enable otelcol-contrib
+systemctl start otelcol-contrib
+EOF
 
   tags = {
     Name = "otel-collector"
   }
 }
-
-# ============================================================
-# Saída útil: IPs da instância
-# ============================================================
 
 output "otel_collector_private_ip" {
   value = aws_instance.otel_collector.private_ip
