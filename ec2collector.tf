@@ -42,7 +42,7 @@ exporters:
   otlp:
     endpoint: "ingest.us.signoz.cloud:443"
     headers:
-      signoz-access-token: "b4e4cb2f-5337-4c86-a952-793acc1370a3"
+      signoz-ingestion-key: "b4e4cb2f-5337-4c86-a952-793acc1370a3"
     tls:
       insecure: false
 
