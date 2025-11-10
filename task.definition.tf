@@ -38,11 +38,11 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
         },
         {
           name  = "SIGNOZ_INGESTION_KEY"
-          value = b4e4cb2f-5337-4c86-a952-793acc1370a3"
+          value = "b4e4cb2f-5337-4c86-a952-793acc1370a3"
         },
         {
           name  = "OTEL_EXPORTER_OTLP_HEADERS"
-          value = "signoz-access-token=XWAETMw2LLGA7RV9MXndFZFQkdyFL8DDNO-u"
+          value = "signoz-access-token=b4e4cb2f-5337-4c86-a952-793acc1370a3"
         }
       ]
     }
