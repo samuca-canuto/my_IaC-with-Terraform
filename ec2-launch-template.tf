@@ -1,6 +1,6 @@
 resource "aws_launch_template" "ec2_lt" {
   name_prefix = "ec2-template"
-  image_id = "ami-0c55b159cbfafe1f0"  # AMI otimizada para ECS
+  image_id = "ami-053b0d53c279acc90"  # AMI otimizada para ECS
 
 
   instance_type = "t2.micro"
