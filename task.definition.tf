@@ -38,11 +38,11 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
         },
         {
           name  = "OTEL_EXPORTER_OTLP_PROTOCOL"
-          value = "http/protobuf"
+          value = "grpc"
         },
         {
           name  = "OTEL_EXPORTER_OTLP_ENDPOINT"
-          value = "http://10.0.1.160:4318"
+          value = "http://10.0.1.160:4317"
         }
       ]
     }
