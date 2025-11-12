@@ -14,17 +14,22 @@ aws_subnet.sub-pub2.id
 }
 
 resource "aws_lb_target_group" "ec2_tg" {
-  name        = "webapp-tg"
+  name        = "tg-webapp"
   port        = 80
   protocol    = "HTTP"
-  target_type = "ip"
-#  vpc_id      = "vpc-068827f882e554167" # VPC default (COMENTAR ESTA LINHA PRA VER O QUE ACONTECE)
-  vpc_id      = aws_vpc.main.id # VPC default (COMENTAR ESTA LINHA PRA VER O QUE ACONTECE)
-
+  vpc_id      = aws_vpc.main.id
+  target_type = "ip" # <- CORREÇÃO CRUCIAL
   health_check {
-    path = "/"
+    path                = "/"
+    protocol            = "HTTP"
+    matcher             = "200"
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
   }
 }
+
 
 resource "aws_lb_listener" "ec2_alb_listener" {
   load_balancer_arn = aws_alb.ec2_alb.arn
