@@ -16,6 +16,7 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
       cpu       = 1024
       memory    = 256
       essential = true
+
       portMappings = [
         {
           containerPort = 80
@@ -23,6 +24,7 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
           protocol      = "tcp"
         }
       ]
+
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -31,6 +33,7 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
           awslogs-stream-prefix = "ecs"
         }
       }
+
       environment = [
         {
           name  = "OTEL_SERVICE_NAME"
@@ -38,11 +41,15 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
         },
         {
           name  = "OTEL_EXPORTER_OTLP_PROTOCOL"
-          value = "grpc"
+          value = "http/protobuf"
         },
         {
           name  = "OTEL_EXPORTER_OTLP_ENDPOINT"
-          value = "http://10.0.1.160:4317"
+          value = "http://10.0.1.160:4318"
+        },
+        {
+          name  = "OTEL_EXPORTER_OTLP_HEADERS"
+          value = "signoz-ingestion-key=SEU_INGESTION_TOKEN"
         }
       ]
     }
