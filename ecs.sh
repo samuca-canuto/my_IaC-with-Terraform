@@ -19,6 +19,19 @@ receivers:
     protocols:
       grpc:
       http:
+  hostmetrics:
+    collection_interval: 30s
+    scrapers:
+      cpu:
+      load:
+      memory:
+      filesystem:
+      network:
+      disk:
+      processes:
+
+processors:
+  batch:
 
 exporters:
   otlp:
@@ -31,13 +44,16 @@ exporters:
 service:
   pipelines:
     metrics:
-      receivers: [otlp]
+      receivers: [otlp, hostmetrics]
+      processors: [batch]
       exporters: [otlp]
     traces:
       receivers: [otlp]
+      processors: [batch]
       exporters: [otlp]
     logs:
       receivers: [otlp]
+      processors: [batch]
       exporters: [otlp]
 EOF
 
