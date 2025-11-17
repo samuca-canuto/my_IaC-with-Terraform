@@ -18,7 +18,9 @@ resource "aws_launch_template" "ec2_lt" {
         Name = "esc_instance"
     }
   } 
-  user_data = filebase64("${path.module}/ecs.sh")
+  user_data = base64encode(templatefile("${path.module}/ecs.sh", {
+  signoz_ingestion_key = var.signoz_ingestion_key
+}))
 }
 
 
