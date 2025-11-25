@@ -31,10 +31,15 @@ receivers:
       processes:
 
 processors:
+  # 1. NOVO: Processador para detectar e adicionar recursos (hostname)
   resourcedetection:
-    detectors: [env, system]
+    # O "detector" Host é responsável por ler o hostname do sistema
+    detectors: [system]
     system:
+      # Renomeia o atributo padrão 'host.name' para 'service.instance.id' se necessário
+      # Mas para o SigNoz, o 'host.name' já é suficiente.
       hostname_sources: [os]
+      
   batch:
 
 exporters:
@@ -49,15 +54,18 @@ service:
   pipelines:
     metrics:
       receivers: [otlp, hostmetrics]
+      # 2. MUDANÇA: Adicionar 'resourcedetection' ANTES do 'batch'
       processors: [resourcedetection, batch]
       exporters: [otlp]
     traces:
       receivers: [otlp]
-      processors: [resourcedetection, batch]
+      # Opcional: Você pode adicionar 'resourcedetection' aqui também, mas não é obrigatório para a infra
+      processors: [batch] 
       exporters: [otlp]
     logs:
       receivers: [otlp]
-      processors: [resourcedetection, batch]
+      # Opcional: Você pode adicionar 'resourcedetection' aqui também
+      processors: [batch]
       exporters: [otlp]
 EOF
 
