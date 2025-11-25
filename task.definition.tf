@@ -1,6 +1,6 @@
 resource "aws_ecs_task_definition" "ecs_task_definition" {
   family             = "webapp"
-  network_mode       = "awsvpc"
+  network_mode       = "bridge"
   requires_compatibilities = ["EC2"]
   execution_role_arn = "arn:aws:iam::787351301643:role/LabRole"
   cpu                = 1024
