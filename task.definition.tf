@@ -12,7 +12,7 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
   container_definitions = jsonencode([
     {
       name      = "webapp-ctr"
-      image     = "strm/helloworld-http"
+      image     = "${aws_ecr_repository.app_repo.repository_url}:latest"
       cpu       = 1024
       memory    = 256
       essential = true
