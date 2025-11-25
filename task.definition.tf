@@ -1,8 +1,10 @@
 resource "aws_ecs_task_definition" "ecs_task_definition" {
   family             = "webapp"
   network_mode       = "awsvpc"
+  requires_compatibilities = ["EC2"]
   execution_role_arn = "arn:aws:iam::787351301643:role/LabRole"
   cpu                = 1024
+  memory = 512
 
   runtime_platform {
     operating_system_family = "LINUX"
