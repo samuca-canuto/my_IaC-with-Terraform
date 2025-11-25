@@ -31,6 +31,10 @@ receivers:
       processes:
 
 processors:
+  resourcedetection:
+    detectors: [env, system]
+    system:
+      hostname_sources: [os]
   batch:
 
 exporters:
@@ -45,17 +49,18 @@ service:
   pipelines:
     metrics:
       receivers: [otlp, hostmetrics]
-      processors: [batch]
+      processors: [resourcedetection, batch]
       exporters: [otlp]
     traces:
       receivers: [otlp]
-      processors: [batch]
+      processors: [resourcedetection, batch]
       exporters: [otlp]
     logs:
       receivers: [otlp]
-      processors: [batch]
+      processors: [resourcedetection, batch]
       exporters: [otlp]
 EOF
+
 
 # Reinicia o collector com nova config
 sudo systemctl restart otelcol-contrib
