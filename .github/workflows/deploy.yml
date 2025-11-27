@@ -39,22 +39,27 @@ jobs:
       # Nota: Este passo depende que o passo 1 tenha configurado as credenciais
 
     # 3. Docker Build e Tag (Cria a imagem)
+   # NOVO PASSO: DEBUG - MOSTRA O CONTEÚDO DO DIRETÓRIO
+    - name: 🔎 Debugar Estrutura do Repositório
+      run: |
+        echo "Conteúdo da Raiz do Repositório (onde docker build é executado):"
+        ls -la
+        echo "---"
+        echo "Tentando listar o conteúdo da pasta de contexto:"
+        ls -la ./my_IaC-with-Terraform || echo "Erro: Pasta não encontrada exatamente com este nome!"
+
+    # 3. Docker Build e Tag (Cria a imagem)
     - name: 🏗️ Construir, Taggear e Mapear Imagem
       id: build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ github.sha }}
+        CONTEXT_PATH: ./my_IaC-with-Terraform # Use a variável
       run: |
-        # Define o caminho de contexto para a pasta que contém o Dockerfile e o código
-        CONTEXT_PATH=./my_IaC-with-Terraform
-        
-        # Construção da imagem, usando a pasta como contexto
+        # Use a variável para garantir consistência
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $CONTEXT_PATH
         
-        # Cria a tag 'latest'
         docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
-        
-        # Define as outputs para os próximos passos
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
         echo "latest_image=$ECR_REGISTRY/$ECR_REPOSITORY:latest" >> $GITHUB_OUTPUT
         
