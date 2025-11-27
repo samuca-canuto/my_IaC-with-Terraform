@@ -6,7 +6,7 @@
   "executionRoleArn": "arn:aws:iam::787351301643:role/LabRole",
   "cpu": "1024",
   "memory": "512",
-  "networkMode": "bridge", // Use 'bridge' ou remova, se estiver usando a configuração revisada
+  "networkMode": "awsvpc", 
   "runtimePlatform": {
     "operatingSystemFamily": "LINUX",
     "cpuArchitecture": "X86_64"
