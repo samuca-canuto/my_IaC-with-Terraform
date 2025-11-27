@@ -7,7 +7,7 @@ on:
       - main # Roda quando houver push na branch 'main'
 
 env:
-  AWS_REGION: ${{ secrets.AWS_REGION }}
+  AWS_REGION: us-east-1
   ECR_REPOSITORY: webapp-repo # Nome do seu repositório ECR
   ECS_CLUSTER: ecs-cluster     # Nome do seu cluster ECS
   ECS_SERVICE: webapp-svc      # Nome do seu serviço ECS
