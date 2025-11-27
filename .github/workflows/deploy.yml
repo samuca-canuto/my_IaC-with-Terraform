@@ -45,11 +45,16 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        # Verifique novamente se este caminho está 100% correto
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./my_IaC-with-Terraform
+        # Define o caminho de contexto para a pasta que contém o Dockerfile e o código
+        CONTEXT_PATH=./my_IaC-with-Terraform
         
-        # O resto do código permanece igual
+        # Construção da imagem, usando a pasta como contexto
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $CONTEXT_PATH
+        
+        # Cria a tag 'latest'
         docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
+        
+        # Define as outputs para os próximos passos
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
         echo "latest_image=$ECR_REGISTRY/$ECR_REPOSITORY:latest" >> $GITHUB_OUTPUT
         
