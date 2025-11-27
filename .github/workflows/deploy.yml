@@ -23,8 +23,6 @@ jobs:
     - name: 📦 Checkout do Código
       uses: actions/checkout@v4
 
-    ---
-
     # 1. Configura as Credenciais AWS (AGORA COM SESSION TOKEN)
     - name: 🔑 Configurar Credenciais AWS
       uses: aws-actions/configure-aws-credentials@v3
