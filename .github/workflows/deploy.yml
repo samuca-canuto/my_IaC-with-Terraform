@@ -45,17 +45,14 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        # ⚠️ Mude o '.' para a subpasta onde o Dockerfile realmente está
-        # O caminho é my_IaC-with-Terraform/, que contém o Dockerfile e o código.
+        # Verifique novamente se este caminho está 100% correto
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./my_IaC-with-Terraform
         
-        # Cria a tag 'latest'
+        # O resto do código permanece igual
         docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
-        
-        # Define as outputs para os próximos passos
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
         echo "latest_image=$ECR_REGISTRY/$ECR_REPOSITORY:latest" >> $GITHUB_OUTPUT
-
+        
     # 4. Docker Push (Envia a imagem para o ECR)
     - name: 📤 Push da Imagem para o Amazon ECR
       env:
