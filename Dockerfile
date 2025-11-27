@@ -11,5 +11,5 @@ RUN npm run build # Se houver um build step
 FROM node:18-alpine
 WORKDIR /app
 COPY --from=builder /app .
-EXPOSE 80 # A porta que sua aplicação usa dentro do container
+EXPOSE 80 
 CMD ["node", "server.js"] # Comando para iniciar sua aplicação
