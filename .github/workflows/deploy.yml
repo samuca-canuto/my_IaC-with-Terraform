@@ -38,8 +38,6 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v2
       # Nota: Este passo depende que o passo 1 tenha configurado as credenciais
 
-    ---
-    
     # 3. Docker Build e Tag (Cria a imagem)
     - name: 🏗️ Construir, Taggear e Mapear Imagem
       id: build-image
@@ -59,8 +57,6 @@ jobs:
       run: |
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.sha }}
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
-
-    ---
 
     # 5. Cria um Novo Arquivo de Task Definition
     - name: 📝 Renderizar Novo Task Definition
