@@ -5,12 +5,13 @@ resource "aws_ecs_service" "ecs_service" {
   desired_count   = 2
 
   network_configuration {
-    security_groups = [aws_security_group.security_group.id]
-    subnets = [
-      aws_subnet.sub-pub1.id,
-      aws_subnet.sub-pub2.id
-    ]
-  }
+  security_groups = [aws_security_group.security_group.id]
+  subnets = [
+    aws_subnet.sub-priv1.id,
+    aws_subnet.sub-priv2.id
+  ]
+  assign_public_ip = false
+}
 
   force_new_deployment = true
 
