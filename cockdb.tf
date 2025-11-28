@@ -1,6 +1,6 @@
 resource "aws_key_pair" "ssh_key" {
   key_name   = "cockroach-key"
-  public_key = file("~/.ssh/id_rsa.pub")
+  public_key = file("C:/Users/admin/.ssh/id_rsa.pub")
 }
 
 resource "aws_security_group" "cockroach_sg" {
@@ -35,25 +35,35 @@ resource "aws_instance" "cockroach" {
   ami           = "ami-0c7217cdde317cfec" # Amazon Linux 2023
   instance_type = "t3.micro"
   key_name      = aws_key_pair.ssh_key.key_name
-  subnet_id     =  aws_subnet.sub-pub1.id
+  subnet_id     = aws_subnet.sub-pub1.id
 
   vpc_security_group_ids = [aws_security_group.cockroach_sg.id]
 
   user_data = <<-EOF
     #!/bin/bash
-    sudo yum install -y wget
-    wget https://binaries.cockroachdb.com/cockroach-v23.2.4.linux-amd64.tgz
-    tar xzf cockroach-*.tgz
-    cp cockroach-*/cockroach /usr/local/bin
+    sudo yum install -y wget tar
 
-    mkdir /var/lib/cockroach
+    wget https://binaries.cockroachdb.com/cockroach-v23.2.4.linux-amd64.tgz
+    tar xzf cockroach-v23.2.4.linux-amd64.tgz
+    cp cockroach-v23.2.4.linux-amd64/cockroach /usr/local/bin
+
+    mkdir -p /var/lib/cockroach
+
+    PRIVATE_IP=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)
+
     cockroach start-single-node \
       --insecure \
-      --listen-addr=0.0.0.0 \
-      --http-addr=0.0.0.0:8080 \
+      --listen-addr=\${PRIVATE_IP}:26257 \
+      --http-addr=\${PRIVATE_IP}:8080 \
       --store=/var/lib/cockroach \
       --background
   EOF
+
+  tags = {
+    Name = "cockroach-db"
+  }
+}
+
 
   tags = {
     Name = "cockroach-single-node"
