@@ -64,12 +64,6 @@ resource "aws_instance" "cockroach" {
   }
 }
 
-
-  tags = {
-    Name = "cockroach-single-node"
-  }
-}
-
 output "cockroach_public_ip" {
   value = aws_instance.cockroach.private_ip
 }
